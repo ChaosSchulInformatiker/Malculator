@@ -26,10 +26,10 @@ public interface ASTNode {
     }
 
     class PrimaryExpression implements ASTNode {
-        public Either<Token.Number, Expression> value;
+        public Either<Value, Expression> value;
     }
 
-    class Number implements ASTNode {
+    class Value implements ASTNode {
         public Token.Number number;
         public Token.SumOp[] signs;
     }

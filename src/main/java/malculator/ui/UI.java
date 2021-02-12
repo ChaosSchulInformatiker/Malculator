@@ -97,6 +97,9 @@ public class UI {
 
         ImGui.text("Hello World!");
         ImGui.text("Your fps: " + (int) (savedFps + 0.5));
+        ImGui.text("");
+
+        ASTRenderer.renderCalculation(ASTRenderer.test);
 
         ImGui.end();
     }
