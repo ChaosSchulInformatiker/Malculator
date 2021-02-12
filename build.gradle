@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+}
+
+group 'io.github.q11-maristenkolleg'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+ext {
+    lwjglVersion = '3.2.3'
+    imguiVersion = '1.79-1.4.0'
+
+    imguiNatives = "imgui-java-natives-windows"
+    lwjglNatives = "natives-windows"
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations:16.0.2'
+
+    implementation "io.imgui.java:imgui-java-binding:$imguiVersion"
+    implementation "io.imgui.java:imgui-java-lwjgl3:$imguiVersion"
+    runtimeOnly "io.imgui.java:$imguiNatives:$imguiVersion"
+
+    ["", "-glfw", "-opengl", "-stb", "-tinyfd"].each {
+        implementation "org.lwjgl:lwjgl$it:$lwjglVersion"
+        runtimeOnly "org.lwjgl:lwjgl$it::$lwjglNatives"
+    }
+
+    implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+test {
+    useJUnitPlatform()
+}
