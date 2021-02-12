@@ -4,6 +4,7 @@ import imgui.ImGui;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
+import malculator.shared.Input;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -31,6 +32,8 @@ public class UI {
         glfwShowWindow(window);
 
         glfwMakeContextCurrent(window);
+
+        glfwSetCharCallback(window, UI::charCallback);
 
         GL.createCapabilities();
 
@@ -101,6 +104,8 @@ public class UI {
 
         ASTRenderer.renderCalculation(ASTRenderer.test);
 
+        ImGui.text(Input.input);
+
         ImGui.end();
     }
 
@@ -110,5 +115,13 @@ public class UI {
 
         glfwDestroyWindow(window);
         glfwTerminate();
+    }
+
+    private static void charCallback(long window, int codepoint) {
+        Input.input += (char) codepoint;
+    }
+
+    private static void keyCallback() {
+        //TODO
     }
 }

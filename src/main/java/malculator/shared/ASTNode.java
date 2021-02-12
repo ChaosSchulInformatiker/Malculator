@@ -5,6 +5,7 @@ import malculator.utils.Either;
 public interface ASTNode {
     /**
      * Represents the whole calculation
+     * Either an expression or a syntax error
      */
     class Calculation implements ASTNode {
         public Either<Expression, Token.SyntaxError> calculation;
