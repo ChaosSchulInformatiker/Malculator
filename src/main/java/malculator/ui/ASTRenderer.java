@@ -9,57 +9,59 @@ import org.jetbrains.annotations.NotNull;
 
 public class ASTRenderer {
     public static final ASTNode.Calculation test = new ASTNode.Calculation() {{
-        calculation = new Expression() {{
-            value = new Either.Second<>() {{
-                value = new Sum() {{
-                     children = new Product[] {
-                           new Product() {{
-                               children = new Power[] {
-                                       new Power() {{
-                                           children = new PrimaryExpression[] {
-                                                   new PrimaryExpression() {{
-                                                       value = new First<>() {{
-                                                           value = new Value() {{
-                                                               signs = new Token.SumOp[0];
-                                                               number = new Token.Number() {{
-                                                                   value = 1.0;
-                                                               }};
-                                                           }};
-                                                       }};
-                                                   }}
-                                           };
-                                       }}
-                               };
-                               operators = new Token.ProductOp[0];
-                           }},
-                             new Product() {{
-                                 children = new Power[] {
-                                         new Power() {{
-                                             children = new PrimaryExpression[] {
-                                                     new PrimaryExpression() {{
-                                                         value = new First<>() {{
-                                                             value = new Value() {{
-                                                                 signs = new Token.SumOp[0];
-                                                                 number = new Token.Number() {{
-                                                                     value = 2.5;
-                                                                 }};
-                                                             }};
-                                                         }};
-                                                     }}
-                                             };
-                                         }}
-                                 };
-                                 operators = new Token.ProductOp[0];
-                             }}
-                    };
-                     operators = new Token.SumOp[] { Token.SumOp.PLUS };
-                }};
+        calculation = new Either.First<>() {{
+            value = new Expression() {{
+                    value = new Either.Second<>() {{
+                        value = new Sum() {{
+                            children = new Product[]{
+                                    new Product() {{
+                                        children = new Power[]{
+                                                new Power() {{
+                                                    children = new PrimaryExpression[]{
+                                                            new PrimaryExpression() {{
+                                                                value = new First<>() {{
+                                                                    value = new Value() {{
+                                                                        signs = new Token.SumOp[0];
+                                                                        number = new Token.Number() {{
+                                                                            value = 1.0;
+                                                                        }};
+                                                                    }};
+                                                                }};
+                                                            }}
+                                                    };
+                                                }}
+                                        };
+                                        operators = new Token.ProductOp[0];
+                                    }},
+                                    new Product() {{
+                                        children = new Power[]{
+                                                new Power() {{
+                                                    children = new PrimaryExpression[]{
+                                                            new PrimaryExpression() {{
+                                                                value = new First<>() {{
+                                                                    value = new Value() {{
+                                                                        signs = new Token.SumOp[0];
+                                                                        number = new Token.Number() {{
+                                                                            value = 2.5;
+                                                                        }};
+                                                                    }};
+                                                                }};
+                                                            }}
+                                                    };
+                                                }}
+                                        };
+                                        operators = new Token.ProductOp[0];
+                                    }}
+                            };
+                            operators = new Token.SumOp[]{Token.SumOp.PLUS};
+                        }};
+                    }};
             }};
         }};
     }};
 
     public static void renderCalculation(@NotNull ASTNode.Calculation ctx) {
-        renderExpression(ctx.calculation);
+        ctx.calculation.either(ASTRenderer::renderExpression, error -> ImGui.text("Syntax error"));
     }
 
     public static void renderExpression(@NotNull ASTNode.Expression ctx) {
