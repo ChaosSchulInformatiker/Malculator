@@ -3,13 +3,6 @@ package malculator.shared;
 import org.jetbrains.annotations.NotNull;
 
 public interface Token {
-    /**
-     * Syntax error
-     */
-    class SyntaxError implements Token {
-        @NotNull public static SyntaxError INSTANCE = new SyntaxError();
-        private SyntaxError() {}
-    }
 
     /**
      * A number

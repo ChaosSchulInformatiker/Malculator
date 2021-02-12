@@ -8,7 +8,7 @@ public interface ASTNode {
      * Either an expression or a syntax error
      */
     class Calculation implements ASTNode {
-        public Either<Expression, Token.SyntaxError> calculation;
+        public Either<Expression, Error> calculation;
     }
 
     /**
