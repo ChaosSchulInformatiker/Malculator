@@ -1,7 +1,8 @@
 package malculator.ui;
 
+import imgui.ImDrawList;
 import imgui.ImGui;
-import imgui.flag.ImGuiStyleVar;
+import imgui.ImVec2;
 import malculator.shared.ASTNode;
 import malculator.shared.Token;
 import malculator.utils.Either;
@@ -60,8 +61,18 @@ public class ASTRenderer {
         }};
     }};
 
+    public static float posX = 100f, posY = 100f;
+
+    public static final float SPACE = 5f;
+    private static boolean useSpace = true;
+
+    private static ImDrawList drawList;
+    private static float offX, offY;
+
     public static void renderCalculation(@NotNull ASTNode.Calculation ctx) {
+        drawList = ImGui.getWindowDrawList();
         ctx.calculation.either(ASTRenderer::renderExpression, error -> ImGui.text("Syntax error"));
+        offX = offY = 0;
     }
 
     public static void renderExpression(@NotNull ASTNode.Expression ctx) {
@@ -86,11 +97,14 @@ public class ASTRenderer {
 
     public static void renderPower(@NotNull ASTNode.Power ctx) {
         renderPrimaryExpression(ctx.children[0]);
+        float goBack = 0f; // After rendering the powers the previous y is used
         for (int i = 1; i < ctx.children.length; i++) {
-            ImGui.text("^");
-            ImGui.sameLine();
+            posX += SPACE / 2f;
+            posY -= SPACE;
+            goBack += SPACE;
             renderPrimaryExpression(ctx.children[i]);
         }
+        posY += goBack;
     }
 
     public static void renderPrimaryExpression(@NotNull ASTNode.PrimaryExpression ctx) {
@@ -98,37 +112,46 @@ public class ASTRenderer {
     }
 
     public static void renderValue(@NotNull ASTNode.Value ctx) {
-        ImGui.pushStyleVar(ImGuiStyleVar.ItemSpacing, 0f, 0f);
+        useSpace = false;
         for (Token.SumOp sign : ctx.signs) {
             renderSumOp(sign);
         }
-        ImGui.popStyleVar();
+        useSpace = true;
         renderNumber(ctx.number);
     }
 
     public static void renderNumber(@NotNull Token.Number ctx) {
+        // Don't know if there's a method for this
         var afterDot = ctx.value * 10.0 - (int) ctx.value * 10;
-        ImGui.text(afterDot == 0.0 ? String.valueOf((int) ctx.value) : String.valueOf(ctx.value));
-        ImGui.sameLine();
+        var numberString = afterDot == 0.0 ? String.valueOf((int) ctx.value) : String.valueOf(ctx.value);
+        var vec = new ImVec2();
+        ImGui.calcTextSize(vec, numberString);
+        drawList.addText(posX + offX, posY + offY, -1, numberString);
+        offX += vec.x;
+        if (useSpace) offX += SPACE;
     }
 
     public static void renderSumOp(@NotNull Token.SumOp ctx) {
-        ImGui.text(
-            switch (ctx) {
-                case PLUS -> "+";
-                case MINUS -> "-";
-            }
-        );
-        ImGui.sameLine();
+        var text = switch (ctx) {
+            case PLUS -> "+";
+            case MINUS -> "-";
+        };
+        var vec = new ImVec2();
+        ImGui.calcTextSize(vec, text);
+        drawList.addText(posX + offX, posY + offY, -1, text);
+        offX += vec.x;
+        if (useSpace) offX += SPACE;
     }
 
     public static void renderProductOp(@NotNull Token.ProductOp ctx) {
-        ImGui.text(
-            switch (ctx) {
-                case TIMES -> "×";
-                case DIV -> "÷";
-            }
-        );
-        ImGui.sameLine();
+        var text = switch (ctx) {
+            case TIMES -> "×";
+            case DIV -> "÷";
+        };
+        var vec = new ImVec2();
+        ImGui.calcTextSize(vec, text);
+        drawList.addText(posX + offX, posY + offY, -1, text);
+        offX += vec.x;
+        if (useSpace) offX += SPACE;
     }
 }

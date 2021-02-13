@@ -1,11 +1,15 @@
 package malculator.ui;
 
+import imgui.ImFont;
 import imgui.ImGui;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 import malculator.shared.Input;
+import malculator.utils.ImGuiUtils;
 import org.lwjgl.opengl.GL;
+
+import java.util.ArrayList;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11C.*;
@@ -22,6 +26,15 @@ public class UI {
     private static ImGuiImplGl3 implGl3;
 
     private static double fpsUpdateTimer;
+
+    /**
+     * The fonts used:
+     * <ol start="0">
+     *     <li>The standard font (Cambria Math), 25px</li>
+     *     <li>Also Cambria Math, but 15px</li>
+     * </ol>
+     */
+    public static ArrayList<ImFont> fonts = new ArrayList<>();
 
     public static void setup() {
         if (!glfwInit())
@@ -44,8 +57,14 @@ public class UI {
         implGlfw = new ImGuiImplGlfw();
         implGl3 = new ImGuiImplGl3();
 
-        //var io = ImGui.getIO();
+        var io = ImGui.getIO();
         //io.addConfigFlags(ImGuiConfigFlags.DockingEnable | ImGuiConfigFlags.ViewportsEnable);
+
+        var cambria = ImGuiUtils.loadFromResources("fonts/cambria.ttf");
+        fonts.add(io.getFonts().addFontFromMemoryTTF(cambria, 25f));
+        fonts.add(io.getFonts().addFontFromMemoryTTF(cambria, 15f));
+
+        io.setFontDefault(fonts.get(0));
 
         implGlfw.init(window, true);
         implGl3.init();
