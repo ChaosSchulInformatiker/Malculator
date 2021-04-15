@@ -4,7 +4,7 @@ import imgui.ImDrawList;
 import imgui.ImGui;
 import imgui.ImVec2;
 import malculator.shared.ASTNode;
-import malculator.shared.Token;
+import malculator.shared.ast.Token;
 import malculator.utils.Either;
 import org.jetbrains.annotations.NotNull;
 

@@ -5,7 +5,6 @@ import imgui.ImGui;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
-import malculator.shared.Input;
 import malculator.utils.ImGuiUtils;
 import org.lwjgl.opengl.GL;
 
