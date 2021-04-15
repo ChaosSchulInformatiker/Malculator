@@ -8,6 +8,7 @@ public class Function {
     NodeTree dTree;
     String original_function;
     String simplified_function;
+    String derivative;
 
     public Function(String func) {
         original_function = func;
@@ -16,6 +17,9 @@ public class Function {
         tree = parser.getTree();
         tree.solve();
         simplified_function = tree.toFunction();
+        dTree = tree;
+        dTree.dSolve();
+        derivative = dTree.toFunction();
     }
 
     public String getSimplified_function() {
@@ -23,16 +27,7 @@ public class Function {
     }
 
     public String getDerivative() {
-        dTree = tree;
-        dTree.dSolve();
-        return dTree.toString();
-    }
-
-    public NodeTree getTree() {
-        return tree;
-    }
-
-    public NodeTree getdTree() {
-        return dTree;
+        return derivative;
     }
 }
+
