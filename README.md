@@ -1,2 +1,2 @@
 # Malculator
-Software project v2
+´Derivative Calculator
